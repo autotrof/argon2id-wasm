@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Argon2id WASM example</title>
+  </head>
+  <body>
+    <label>
+      Kata sandi
+      <input id="password" type="password" value="contoh-rahasia" />
+    </label>
+    <button id="hash-button">Buat hash</button>
+    <button id="verify-button" disabled>Periksa kata sandi</button>
+    <pre id="result"></pre>
+
+    <script type="module">
+      import init, {
+        hash_password,
+        verify_password,
+      } from "../src/wasm/wasm_argon2id.js";
+
+      await init();
+
+      const passwordInput = document.querySelector("#password");
+      const result = document.querySelector("#result");
+      const verifyButton = document.querySelector("#verify-button");
+      let passwordHash = "";
+
+      document.querySelector("#hash-button").addEventListener("click", () => {
+        passwordHash = hash_password(passwordInput.value);
+        result.textContent = passwordHash;
+        verifyButton.disabled = false;
+      });
+
+      verifyButton.addEventListener("click", () => {
+        const valid = verify_password(passwordInput.value, passwordHash);
+        result.textContent = valid ? "Kata sandi benar." : "Kata sandi tidak cocok.";
+      });
+    </script>
+  </body>
+</html>
