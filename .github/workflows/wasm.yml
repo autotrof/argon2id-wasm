@@ -16,14 +16,11 @@ jobs:
           toolchain: stable
           target: wasm32-unknown-unknown
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
 
-      - run: npm install
       - run: cargo install wasm-bindgen-cli --version 0.2.123
-      - run: npm run test:rust
-      - run: npm run build:wasm:cloudflare
+      - run: cargo test --manifest-path wasm-source/argon2id/Cargo.toml
+      - run: cargo build --manifest-path wasm-source/argon2id/Cargo.toml --release --target wasm32-unknown-unknown
+      - run: wasm-bindgen wasm-source/argon2id/target/wasm32-unknown-unknown/release/wasm_argon2id.wasm --out-dir src/wasm --target bundler
 
       - uses: actions/upload-artifact@v4
         with:
