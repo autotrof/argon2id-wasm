@@ -61,6 +61,18 @@ npm run build:wasm
 
 Hasil build ditulis ke `src/wasm/`, termasuk `wasm_argon2id.js` dan `wasm_argon2id_bg.wasm`.
 
+### Build untuk Cloudflare Workers dan bundler
+
+Cloudflare Workers tidak mengizinkan kompilasi WebAssembly dinamis saat runtime. Untuk Vite, SvelteKit, dan bundler Worker, gunakan target `bundler`:
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install wasm-bindgen-cli --version 0.2.123
+npm run build:wasm:cloudflare
+```
+
+Target ini menghasilkan binding yang mengimpor modul WASM secara statis sehingga bundler dapat memasukkannya ke Worker. Gunakan artifact dari `src/wasm/` untuk deployment Cloudflare; jangan gunakan output target `web` untuk runtime Worker.
+
 ## Pengujian source Rust
 
 ```bash

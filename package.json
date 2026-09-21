@@ -7,7 +7,9 @@
     "src/wasm"
   ],
   "scripts": {
-    "build:wasm": "cargo build --manifest-path wasm-source/argon2id/Cargo.toml --release --target wasm32-unknown-unknown && wasm-bindgen wasm-source/argon2id/target/wasm32-unknown-unknown/release/wasm_argon2id.wasm --out-dir src/wasm --target web",
+    "build:wasm": "npm run build:wasm:web",
+    "build:wasm:web": "cargo build --manifest-path wasm-source/argon2id/Cargo.toml --release --target wasm32-unknown-unknown && wasm-bindgen wasm-source/argon2id/target/wasm32-unknown-unknown/release/wasm_argon2id.wasm --out-dir src/wasm --target web",
+    "build:wasm:cloudflare": "cargo build --manifest-path wasm-source/argon2id/Cargo.toml --release --target wasm32-unknown-unknown && wasm-bindgen wasm-source/argon2id/target/wasm32-unknown-unknown/release/wasm_argon2id.wasm --out-dir src/wasm --target bundler",
     "test:rust": "cargo test --manifest-path wasm-source/argon2id/Cargo.toml"
   },
   "keywords": [

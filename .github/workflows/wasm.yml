@@ -1,0 +1,32 @@
+name: Build WASM
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install
+      - run: cargo install wasm-bindgen-cli --version 0.2.123
+      - run: npm run test:rust
+      - run: npm run build:wasm:cloudflare
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: argon2id-wasm-cloudflare
+          path: src/wasm/
